@@ -1,14 +1,12 @@
-import express, { Request, Response } from 'express'
+import { loginController } from '@/controllers/users.controller'
+import { validatorSignIn } from '@/middlewares/users.middleware'
+import { Request, Response, Router } from 'express'
 
-const router = express.Router()
+const router = Router()
 
 router.get('/', (req: Request, res: Response) => {
   res.send({ data: 'User Home Page' })
 })
-router.post('/create', (req: Request, res: Response) => {
-  // console.log('🚀 ~ file: users.route.ts:9 ~ router.post ~ req:', req.body)
-
-  res.send('Create User')
-})
+router.post('/login', validatorSignIn, loginController)
 
 export default router

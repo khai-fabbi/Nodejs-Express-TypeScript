@@ -9,7 +9,6 @@
       "warn",
       { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }
     ],
-    // "@typescript-eslint/no-unused-vars": "off",
     "prettier/prettier": [
       "warn",
       {

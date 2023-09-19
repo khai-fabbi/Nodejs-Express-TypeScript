@@ -1,5 +1,6 @@
 import express, { Express } from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 // import bodyParser from 'body-parser'
 import userRouter from './routes/users.route'
 import databaseService from './services/database.service'
@@ -13,8 +14,13 @@ const PORT = process.env.PORT || 8080
 // app.use(bodyParser.json())
 // app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use(express.json())
+const allowedOrigins = ['http://localhost:3000']
 
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+}
+app.use(cors(options))
+app.use(express.json())
 // config router
 app.use('/users', userRouter)
 

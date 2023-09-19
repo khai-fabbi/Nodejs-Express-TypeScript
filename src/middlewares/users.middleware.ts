@@ -1,16 +1,37 @@
 import userService from '@/services/user.service'
 import { validate } from '@/utils/validation'
-import { NextFunction, Request, Response } from 'express'
 import { checkSchema } from 'express-validator'
 
-export const validatorSignIn = (req: Request, res: Response, next: NextFunction) => {
-  const { email, password } = req.body
-  if (!email || !password)
-    return res.status(401).json({
-      error: 'email or password invalid'
-    })
-  next()
-}
+export const signinValidator = validate(
+  checkSchema({
+    email: {
+      isEmail: true,
+      notEmpty: true,
+      trim: true
+    },
+    password: {
+      errorMessage: 'Mật khẩu phải lớn hơn 6 và nhỏ hơn 20 kí tự !',
+      notEmpty: true,
+      isString: true,
+      isLength: {
+        options: {
+          min: 6,
+          max: 20
+        }
+      },
+      isStrongPassword: {
+        errorMessage: 'Mật khẩu phải strong',
+        options: {
+          minLength: 6,
+          minLowercase: 1,
+          minUppercase: 1,
+          minNumbers: 1,
+          minSymbols: 1
+        }
+      }
+    }
+  })
+)
 export const registerValidator = validate(
   checkSchema({
     name: {

@@ -1,5 +1,5 @@
 import { loginController, registerController } from '@/controllers/users.controller'
-import { registerValidator, validatorSignIn } from '@/middlewares/users.middleware'
+import { registerValidator, signinValidator } from '@/middlewares/users.middleware'
 import { query, validationResult, matchedData } from 'express-validator'
 import { Request, Response, Router } from 'express'
 
@@ -16,7 +16,7 @@ router.get('/', query('name').notEmpty().withMessage('Name k dc bo trong!').esca
     errors: rs.array()
   })
 })
-router.post('/login', validatorSignIn, loginController)
+router.post('/login', signinValidator, loginController)
 router.post('/register', registerValidator, registerController)
 
 export default router

@@ -1,7 +1,8 @@
 import { loginController, registerController } from '@/controllers/users.controller'
 import { registerValidator, signinValidator } from '@/middlewares/users.middleware'
 import { query, validationResult, matchedData } from 'express-validator'
-import { Request, Response, Router } from 'express'
+import { NextFunction, Request, Response, Router } from 'express'
+import { wrapAsync } from '@/utils/helpers'
 
 const router = Router()
 
@@ -17,6 +18,6 @@ router.get('/', query('name').notEmpty().withMessage('Name k dc bo trong!').esca
   })
 })
 router.post('/login', signinValidator, loginController)
-router.post('/register', registerValidator, registerController)
+router.post('/register', registerValidator, wrapAsync(registerController))
 
 export default router

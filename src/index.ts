@@ -4,6 +4,7 @@ import cors from 'cors'
 // import bodyParser from 'body-parser'
 import userRouter from './routes/users.route'
 import databaseService from './services/database.service'
+import { defaultErrorHandler } from './middlewares/errors.middleware'
 
 dotenv.config()
 
@@ -21,8 +22,11 @@ const options: cors.CorsOptions = {
 }
 app.use(cors(options))
 app.use(express.json())
+
 // config router
 app.use('/users', userRouter)
+
+app.use(defaultErrorHandler)
 
 databaseService.connect().catch(console.dir)
 

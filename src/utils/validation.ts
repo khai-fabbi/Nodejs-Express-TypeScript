@@ -1,3 +1,5 @@
+import { HttpCode } from '@/constants/enum'
+import { EntityError, ErrorWithStatus } from '@/models/Errors'
 import express from 'express'
 import { validationResult, ValidationChain } from 'express-validator'
 import { RunnableValidationChains } from 'express-validator/src/middlewares/schema'
@@ -10,7 +12,16 @@ export const validate = (validation: RunnableValidationChains<ValidationChain>) 
     if (errors.isEmpty()) {
       return next()
     }
+    const errorsObj = errors.mapped()
+    const entityError = new EntityError({ error: {} })
+    for (const key in errorsObj) {
+      const { msg } = errorsObj[key]
+      if (msg instanceof ErrorWithStatus && msg.status !== HttpCode.UNPROCESSABLE_ENTITY) {
+        return next(msg)
+      }
+      entityError.errors[key] = errorsObj[key]
+    }
 
-    res.status(400).json({ errors: errors.mapped() })
+    next(entityError)
   }
 }
